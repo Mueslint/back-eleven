@@ -67,13 +67,8 @@ app.post("/deleteAstronaut", (req, res) => {
   const ref = req.body.ref
   db.collection('astronauts').where(firebase.firestore.FieldPath.documentId(), "==", ref).get()
     .then( snapshot => {
-      if(snapshot.docs.length == 1) {
-        snapshot.docs[0].ref.delete()
-        res.status(200).send("doc deleted")
-      } else {
-        console.error("sameKeyError: 0 or more than one document has been found for this doc.id");
-        res.status(500).send("Error in query")
-      }
+      snapshot.docs[0].ref.delete()
+      res.status(200).send("doc deleted")
     })
     .catch(err => {
       console.error('Error fetching documents', err);
@@ -87,13 +82,8 @@ app.post("/updateAstronaut", (req, res) => {
 
   db.collection('astronauts').where(firebase.firestore.FieldPath.documentId(), "==", ref).get()
     .then( snapshot => {
-      if(snapshot.docs.length == 1) {
-        snapshot.docs[0].ref.update(updatedAstronaut)
-        res.status(200).send("doc updated")
-      } else {
-        console.error("sameKeyError: 0 or more than one document has been found for this doc.id");
-        res.status(500).send("Error in query")
-      }
+      snapshot.docs[0].ref.update(updatedAstronaut)
+      res.status(200).send("doc updated")
     })
     .catch(err => {
       console.error('Error fetching documents', err);
