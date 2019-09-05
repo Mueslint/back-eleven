@@ -57,12 +57,20 @@ app.get("/getAstronauts", (req, res) => {
 
 // create a db document in astronaut collection
 app.post("/postNewAstronaut", (req, res) => {
-  db.collection('astronauts').add(req.body)
-  .then(() => {
-    res.status(200).send("done")
-  })
+  if (req.body.test) {
+    db.collection('test').add(req.body)
+    .then(ref => {
+      res.status(200).send(ref.id)
+    })
+  } else {
+    db.collection('astronauts').add(req.body)
+    .then(ref => {
+      res.status(200).send(ref.id)
+    })
+  }
 })
 
+// delete a db document in astronaut collection
 app.post("/deleteAstronaut", (req, res) => {
   const ref = req.body.ref
   db.collection('astronauts').where(firebase.firestore.FieldPath.documentId(), "==", ref).get()
@@ -76,6 +84,7 @@ app.post("/deleteAstronaut", (req, res) => {
     })
 });
 
+// update a db document in astronaut collection
 app.post("/updateAstronaut", (req, res) => {
   const updatedAstronaut = req.body.updatedAstronaut
   const ref = req.body.ref
@@ -91,6 +100,9 @@ app.post("/updateAstronaut", (req, res) => {
     })
 });
 
+
 app.listen(port, () => {
   console.log(`Server running at port ${port}`);
 });
+
+module.exports = app
